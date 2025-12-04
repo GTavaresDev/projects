@@ -7,6 +7,7 @@ use App\Models\Beer;
 
 class Index extends Component
 {
+    use \Livewire\WithPagination;
     // Evite tipagem rígida em propriedades públicas do Livewire
     public $sortBy = null;
     public $sortDirection = 'asc';

@@ -120,6 +120,10 @@
 
                 </x-table.rows>
             </x-table>
+            <div class="mt-6">
+                {{ $beers->links() }}
+                
+            </div>
         </x-section>
     </flux:main>
 </div>
