@@ -1,3 +1,68 @@
+## 🍺 Beer Code
+
+Aplicação em Laravel + Livewire para gerenciar um catálogo de cervejas, com listagem paginada, filtros avançados (ABV, IBU, EBC, pH, volume), criação/edição de registros e integração com imagens e lojas (`stores`).  
+O projeto está containerizado com **Laravel Sail** usando **PostgreSQL** e front-end com **Vite + TailwindCSS 4**.
+
+---
+
+## 📚 Stack Principal
+
+- **Backend**: Laravel 12, PHP 8.2
+- **Autenticação & Segurança**: Laravel Fortify, 2FA
+- **Frontend**: Livewire (Flux/Volt), TailwindCSS 4, Vite
+- **Banco de Dados**: PostgreSQL (via Docker/Sail)
+- **Outros**:
+  - Livewire Toaster (notificações)
+  - Pest (testes)
+
+---
+
+## ✨ Funcionalidades
+
+- **Autenticação** com login, registro, recuperação de senha e 2FA.
+- **Dashboard autenticado**.
+- **CRUD de Cervejas**:
+  - Listagem paginada (`/beers`)
+  - Criação (`/beers/create`)
+  - Edição (`/beers/{beer}/edit`)
+  - Remoção com feedback visual.
+- **Filtros e ordenação** na listagem:
+  - Filtro por nome.
+  - Filtros numéricos por propriedades: `abv`, `ibu`, `ebc`, `ph`, `volume`.
+  - Operadores suportados: `=`, `>`, `<`, `>=`, `<=`.
+  - Ordenação asc/desc por coluna.
+- **Relacionamentos**:
+  - Cerveja ↔ Lojas (`stores`) via pivot `beer_store` (com `price`, `promo_label`, `url`).
+  - Cerveja ↔ Imagens (`images`) com cover (`cover`).
+
+---
+
+## 🗂 Estrutura Relevante
+
+- `app/Models/Beer.php`: modelo principal de cerveja e relacionamentos.
+- `app/Livewire/Beers/Index.php`: listagem, paginação, filtros e remoção.
+- `app/Livewire/Beers/Create.php` e `Update.php`: criação e edição usando `BeerForm`.
+- `app/Livewire/Forms/BeerForm.php`: validação e operações de `store`/`update`.
+- `app/Services/BeerService.php`: encapsula filtros e ordenação da query de cervejas.
+- `routes/web.php`:
+  - `/` → `welcome`
+  - `/dashboard` (autenticado)
+  - `/beers`, `/beers/create`, `/beers/{beer}/edit` (autenticado).
+- `docker-compose.yml`: serviços `laravel.test` e `pgsql` prontos para uso com Sail.
+
+---
+
+## 🚀 Como Rodar o Projeto (Visão Geral)
+
+1. Clonar o repositório dentro do WSL (ex.: `/home/seu-usuario/projects/beer-code`).
+2. Rodar `composer install` e copiar `.env` (`cp .env.example .env`).
+3. Ajustar permissões (`sudo chmod -R 777 storage bootstrap/cache` em dev).
+4. Subir containers com `./vendor/bin/sail up -d`.
+5. Configurar `.env` para PostgreSQL (se necessário) e rodar `./vendor/bin/sail artisan migrate`.
+6. Rodar `./vendor/bin/sail npm install` e `./vendor/bin/sail npm run dev` ou `./vendor/bin/sail npm run build`.
+
+---
+
 # 🚀 Setup Completo: Laravel, Sail e WSL2
 
 Bem-vindo(a) ao guia de configuração do seu ambiente de desenvolvimento! Este documento detalha os passos necessários para ter o projeto **Laravel** rodando perfeitamente dentro do **WSL2** com o auxílio do **Sail**.
