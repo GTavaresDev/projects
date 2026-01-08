@@ -114,7 +114,12 @@
             <flux:separator/>
 
             {{-- Componente de upload de imagens --}}
-            <livewire:components.image-uploader :model="null" />
+            <livewire:components.image-uploader 
+                :model="$beer"
+                :existing-images="[]"
+                storage-path="{{ $beer ? 'beers/' . $beer->id : '' }}"
+                wire:key="image-uploader-{{ $beer?->id ?? 'new' }}"
+            />
 
             <div class="flex justify-end">
                 <flux:button 

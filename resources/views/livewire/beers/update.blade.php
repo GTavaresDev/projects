@@ -113,8 +113,9 @@
 
             <flux:separator/>
             <livewire:components.image-uploader 
-                :existing-images="$beerForm.images" 
-                wire:model="beerForm.images"
+                :model="$beer"
+                :existing-images="$beer->images ? $beer->images->map(fn($img) => ['id' => $img->id, 'path' => $img->path, 'is_cover' => (bool)$img->is_cover])->toArray() : []" 
+                storage-path="beers/{{ $beer->id }}"
             />
             <div class="flex justify-end">
                 <flux:button 
