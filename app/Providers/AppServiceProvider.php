@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Providers;
-
 use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
+use Masmerise\LivewireToaster\Http\Livewire\Toaster;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Livewire::component('toaster', Toaster::class);
     }
 }
