@@ -1,6 +1,6 @@
 # Backend Architecture & Internal Logic
 
-This document details the exact internal logic, architecture, and operation of the [`backend`](file:///c:/Users/Gabriel/Desktop/projects/backend) service.
+This document details the exact internal logic, modular feature architecture, and operation of the [`backend`](file:///c:/Users/Gabriel/Desktop/projects/backend) service.
 
 ---
 
@@ -14,11 +14,17 @@ HTTP Request (Client)
         ▼
    Express App (/api/v1)
         │
-        ├── /health ─────────► Returns API status & available collections
-        ├── /collections ────► Returns summary of all datasets
-        ├── /movies ─────────► Movie endpoints
-        ├── /recipes ────────► Recipe endpoints
-        └── /:collection ────► Generic dynamic handler for ANY dataset
+        ├── /health ─────────► Discovery & available collections
+        ├── /weather ────────► Weather forecast module (weather/)
+        ├── /placeholders ───► SVG vector image generator (placeholders/)
+        ├── /text-analysis ──► Slugifier & reading time calculator (textAnalysis/)
+        ├── /search ─────────► Spotlight multi-collection search (search/)
+        ├── /random ─────────► Item roulette (random/)
+        ├── /combos ─────────► Movie Night pairing generator (combos/)
+        ├── /stats ──────────► Global analytics & dataset facets (analytics/)
+        ├── /movies ─────────► Movies catalog CRUD (movies/)
+        ├── /recipes ────────► Recipes catalog CRUD (recipes/)
+        └── /:collection ────► Generic dynamic fallback for ANY dataset
                 │
                 ▼
         JsonStoreService (src/services/jsonStore.ts)
@@ -26,6 +32,33 @@ HTTP Request (Client)
                 ▼
         Local Filesystem (data/<collection>/<collection>.json)
 ```
+
+---
+
+## 📂 Feature Module Architecture (`backend/src/routes/`)
+
+Every domain route is cleanly encapsulated in its own folder following the **Route / Service / Types / Index** pattern:
+
+```text
+backend/src/routes/
+├── analytics/         # 📊 /api/v1/stats & /api/v1/:collection/facets
+├── combos/            # 🍿 /api/v1/combos/movie-night
+├── genericCollection/ # 🌐 /api/v1/:collection (Dynamic fallback)
+├── health/            # 🏥 /api/v1/health, /api/v1/collections & /api/v1 (Index)
+├── movies/            # 🎬 /api/v1/movies
+├── placeholders/      # 🖼️ /api/v1/placeholders/svg & /api/v1/placeholders/:w/:h
+├── random/            # 🎲 /api/v1/random
+├── recipes/           # 🍳 /api/v1/recipes
+├── search/            # 🔍 /api/v1/search (Spotlight)
+├── textAnalysis/      # ✍️ /api/v1/text-analysis/analyze & /slugify
+└── weather/           # ⛅ /api/v1/weather & /api/v1/weather/forecast
+```
+
+Each folder contains:
+1. `*.types.ts`: TypeScript contracts and interfaces.
+2. `*.service.ts`: Pure business logic, calculations, algorithms, and generators (independent of Express).
+3. `*.routes.ts`: Express Router handling HTTP input, calling the service, and returning responses.
+4. `index.ts`: Module export hub.
 
 ---
 
@@ -38,61 +71,8 @@ HTTP Request (Client)
 - **Dynamic Attribute Filtering**: Query parameters other than `page`, `limit`, and `q` are treated as property filters (e.g. `?genre=Sci-Fi` or `?category=Pasta`).
 - **Pagination**: Slices the in-memory array using `(page - 1) * limit` and calculates `total` and `totalPages`.
 
-### 2. The HTTP Routing Layer (`src/routes/`)
-- `genericCollection.ts`: Provides a reusable router for any collection name.
-- `health.ts`: Exposes `/api/v1/health` and `/api/v1/collections` which auto-discovers all subfolders inside `data/`.
-- `movies.ts` & `recipes.ts`: Pre-configured routes for standard catalogs.
-
-### 3. Dynamic Auto-Discovery
+### 2. Dynamic Auto-Discovery
 Whenever a new folder and JSON file is created under `data/` (for example, `data/courses/courses.json`), the backend **automatically** serves it at `/api/v1/courses` with full CRUD, search, and pagination without writing a single line of backend code!
-
----
-
-## 📊 Standard API Response Contracts
-
-### Success List / Search Response:
-```json
-{
-  "data": [
-    {
-      "id": "movie-001",
-      "name": "Inception",
-      "description": "A thief who steals corporate secrets...",
-      "image": "https://...",
-      "genre": "Sci-Fi",
-      "rating": 8.8
-    }
-  ],
-  "meta": {
-    "page": 1,
-    "limit": 10,
-    "total": 15,
-    "totalPages": 2
-  }
-}
-```
-
-### Success Single Item Response:
-```json
-{
-  "data": {
-    "id": "movie-001",
-    "name": "Inception",
-    "description": "...",
-    "image": "https://..."
-  }
-}
-```
-
-### Error Response:
-```json
-{
-  "error": {
-    "code": "MOVIE_NOT_FOUND",
-    "message": "Item not found in movies"
-  }
-}
-```
 
 ---
 

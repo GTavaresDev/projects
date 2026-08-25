@@ -65,8 +65,8 @@ Crie o arquivo `.env` copiando a partir de `.env.example`:
 cp .env.example .env
 ```
 
-| Variável | Descrição | Padrão |
-|---|---|---|
+| Variável              | Descrição                   | Padrão                         |
+| --------------------- | --------------------------- | ------------------------------ |
 | `NEXT_PUBLIC_API_URL` | URL base da API do catálogo | `http://localhost:4000/api/v1` |
 
 ---
@@ -74,16 +74,19 @@ cp .env.example .env
 ## 🧪 Instalação e Execução
 
 1. **Instalar dependências**:
+
    ```bash
    npm install
    ```
 
 2. **Executar testes**:
+
    ```bash
    npm run test
    ```
 
 3. **Iniciar servidor de desenvolvimento**:
+
    ```bash
    npm run dev
    ```

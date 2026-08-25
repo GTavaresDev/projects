@@ -6,19 +6,19 @@ Base URL: `http://localhost:4000/api/v1`
 
 ## 📂 Modular Route Architecture
 
-The backend routes are organized into dedicated feature modules:
+The backend routes are organized into 11 dedicated feature modules:
 
-- `weather.ts` ────────► `/api/v1/weather` & `/api/v1/weather/forecast`
-- `placeholders.ts` ────► `/api/v1/placeholders/svg` & `/api/v1/placeholders/:w/:h`
-- `textAnalysis.ts` ────► `/api/v1/text-analysis/analyze` & `/api/v1/text-analysis/slugify`
-- `search.ts` ──────────► `/api/v1/search?q=:term` (Spotlight across all collections)
-- `random.ts` ──────────► `/api/v1/random` (Roulette across all collections)
-- `combos.ts` ──────────► `/api/v1/combos/movie-night` (Smart pairings)
-- `analytics.ts` ───────► `/api/v1/stats` & `/api/v1/:collection/facets`
-- `health.ts` ──────────► `/api/v1/health` & `/api/v1/collections`
-- `movies.ts` ──────────► `/api/v1/movies`
-- `recipes.ts` ─────────► `/api/v1/recipes`
-- `genericCollection.ts` ► `/api/v1/:collection` (dynamic fallback for any `data/<collection>/`)
+- `weather/` ──────────► `/api/v1/weather` & `/api/v1/weather/forecast`
+- `placeholders/` ────► `/api/v1/placeholders/svg` & `/api/v1/placeholders/:w/:h`
+- `textAnalysis/` ────► `/api/v1/text-analysis/analyze` & `/api/v1/text-analysis/slugify`
+- `search/` ──────────► `/api/v1/search?q=:term` (Spotlight across all collections)
+- `random/` ──────────► `/api/v1/random` (Roulette across all collections)
+- `combos/` ──────────► `/api/v1/combos/movie-night` (Smart pairings)
+- `analytics/` ───────► `/api/v1/stats` & `/api/v1/:collection/facets`
+- `health/` ──────────► `/api/v1/health`, `/api/v1/collections` & `/api/v1` (Index)
+- `movies/` ──────────► `/api/v1/movies` (CRUD with Zod validations)
+- `recipes/` ─────────► `/api/v1/recipes` (CRUD with Zod validations)
+- `genericCollection/` ► `/api/v1/:collection` (dynamic fallback for any `data/<collection>/`)
 
 ---
 

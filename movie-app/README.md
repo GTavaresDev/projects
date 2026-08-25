@@ -65,8 +65,8 @@ Set up environment variables by copying `.env.example`:
 cp .env.example .env
 ```
 
-| Variable | Description | Default |
-|---|---|---|
+| Variable              | Description               | Default                        |
+| --------------------- | ------------------------- | ------------------------------ |
 | `NEXT_PUBLIC_API_URL` | Catalog API base endpoint | `http://localhost:4000/api/v1` |
 
 ---
@@ -74,16 +74,19 @@ cp .env.example .env
 ## 🧪 Installation & Running
 
 1. **Install dependencies**:
+
    ```bash
    npm install
    ```
 
 2. **Run tests**:
+
    ```bash
    npm run test
    ```
 
 3. **Start local development server**:
+
    ```bash
    npm run dev
    ```

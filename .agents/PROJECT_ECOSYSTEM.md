@@ -10,22 +10,28 @@ This document provides context for AI agents working in this workspace (`c:\User
 projects/
 ├── backend/               # Express + TypeScript JSON REST API (Port 4000)
 │   ├── data/              # JSON Datasets: movies, recipes, products, books
-│   └── src/               # Application logic
+│   └── src/routes/        # 11 Modular Feature Folders (weather, search, analytics, etc.)
 │
 ├── movie-app/             # Next.js 15 Movies Catalog App (Port 3000)
-│   ├── app/               # App Router pages & detail views
-│   └── components/        # UI components
+│   ├── core/              # Hexagonal Domain & Infrastructure (Models, Ports, Repositories)
+│   ├── src/               # Presentation Layer (App Router, shadcn/ui, Layout)
+│   └── tests/             # Vitest unit tests
 │
 ├── recipe-app/            # Clean Next.js 15 Starter for Recipes (Port 3001)
-│   └── app/               # Ready for custom recipe implementation
+│   └── src/               # User study and practice project
 │
-├── agent-instructions/    # Central documentation folder for AI agents
-│   ├── BACKEND_ARCHITECTURE.md
-│   ├── API_REFERENCE.md
-│   ├── FRONTEND_INTEGRATION.md
-│   └── PROJECT_ECOSYSTEM.md
+├── AGENTS.md              # Root agents guidance & strict rules
 │
-└── AGENTS.md              # Root agents guidance file
+└── .agents/               # 🎯 Unified Agent Instructions Hub
+    ├── rules/
+    │   ├── no-ternary.md
+    │   ├── pedagogical-tutor.md
+    │   └── project-rules.md
+    ├── AGENT_BEHAVIOR_GUIDELINES.md
+    ├── BACKEND_ARCHITECTURE.md
+    ├── API_REFERENCE.md
+    ├── FRONTEND_INTEGRATION.md
+    └── PROJECT_ECOSYSTEM.md
 ```
 
 ---
@@ -55,13 +61,9 @@ npm run dev
 
 ---
 
-## 🤖 Instructions for AI Agents
-1. **Separation of Concerns**: Treat every repository as an independent project.
-2. **Language**: Keep all code, models, commit messages, and API routes in English.
-3. **Adding New Frontend Projects**:
-   - Assign the next available local port (`3002`, `3003`, etc.).
-   - Configure `NEXT_PUBLIC_API_URL=http://localhost:4000/api/v1`.
-   - Never import files across repository boundaries using relative paths (e.g. `../backend/data`).
-4. **Adding New Datasets**:
-   - Simply create `backend/data/<dataset>/<dataset>.json` with an array of objects.
-   - It will immediately be available via API at `/api/v1/<dataset>`.
+## 🤖 Mandatory Instructions for AI Agents
+1. **Pedagogical Mode (Strict)**: Never write code directly into student files. Guide with structural syntax in chat.
+2. **Zero Ternaries**: Never use ternary operators (`condition ? a : b`). Declare explicit `if` and `else`.
+3. **Frontend Hexagonal Architecture**: Place `core/` at the root of frontend projects with `domain/` and `infrastructure/`.
+4. **UI Standards**: Use **shadcn/ui** and **Lucide React** in `src/components/ui/`.
+5. **Language**: Keep all code, models, commit messages, and API routes in English.

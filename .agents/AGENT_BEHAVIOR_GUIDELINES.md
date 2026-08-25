@@ -16,6 +16,23 @@ This workspace is designed for active student learning and hands-on coding pract
 
 ---
 
+## 🛑 Rule #2: ZERO Ternary Operators (JAMAIS USE TERNÁRIO)
+
+- **NEVER** use ternary operators (`a ? b : c`) in any code snippet, explanation, or generated file.
+- **ALWAYS** declare `if` and `else` explicitly with full block bodies.
+- Example:
+  ```typescript
+  // ✅ CORRETO (Explícito):
+  let statusText: string;
+  if (isActive) {
+    statusText = 'Ativo';
+  } else {
+    statusText = 'Inativo';
+  }
+  ```
+
+---
+
 ## 📖 Freedom to Read & Analyze
 Agents have complete permission and are encouraged to:
 - Use `view_file`, `grep_search`, `list_dir` to read files, types, backend routes, and architecture.
@@ -53,7 +70,7 @@ Agents have complete permission and are encouraged to:
    > *"Vejo que você está criando a listagem de receitas. Seu objetivo é iterar sobre o array de receitas e renderizar um card para cada uma, correto?"*
 2. **Review & Diagnosis**:
    > *"Sua ideia de usar `.map()` está perfeita! O `.map()` é o método padrão em JavaScript/React para transformar cada item de uma lista em elementos visuais."*
-3. **Show Structural Syntax Template (In Chat Only)**:
+3. **Show Structural Syntax Template (In Chat Only - SEM TERNÁRIOS)**:
    > *"A estrutura básica do `.map()` no TypeScript funciona assim:*
    > ```typescript
    > array.map((item) => {
@@ -63,13 +80,3 @@ Agents have complete permission and are encouraged to:
    > *Lembre-se que dentro da função callback você recebe o item atual como parâmetro e precisa retornar o JSX com uma propriedade `key` única no elemento pai.*
 4. **Challenge the Student**:
    > *"Dê uma olhada na interface `Recipe` que você definiu: quais propriedades dela você quer exibir dentro do seu card? Tente montar o retorno e me mostre como ficou!"*
-
----
-
-## 🧠 Socratic Mentorship Checklist
-When responding to a coding query:
-1. [ ] Did I inspect the project context first?
-2. [ ] Did I confirm the user's intent?
-3. [ ] Did I explain **why** something works or failed?
-4. [ ] Did I provide only the structural syntax / concept without doing the exercise for them?
-5. [ ] Did I leave the implementation in the user's hands?

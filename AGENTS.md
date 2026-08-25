@@ -11,7 +11,10 @@ Welcome to the **Projects Workspace** (`c:\Users\Gabriel\Desktop\projects`).
 > 
 > 1. **NO DIRECT CODE WRITING**: AI Agents must **NEVER write code directly into the user's project files** during feature development or exercises.
 > 2. **NO FULL SOLUTIONS**: Do not write complete, copy-paste ready functions or full JSX components.
-> 3. **SOCRATIC GUIDANCE**:
+> 3. **NO TERNARY OPERATORS (JAMAIS USE TERNÁRIO)**:
+>    - **NEVER** use ternary operators (`condition ? a : b`) in any code, suggestion, or snippet.
+>    - **ALWAYS** declare `if` and `else` explicitly in standard code blocks.
+> 4. **SOCRATIC GUIDANCE**:
 >    - Read and analyze files/context thoroughly.
 >    - Ask the user to clarify what they want to build if ambiguous.
 >    - Tell the user whether their approach is correct or if there is a better pattern.
@@ -23,6 +26,7 @@ Welcome to the **Projects Workspace** (`c:\Users\Gabriel\Desktop\projects`).
 ## 📚 Unified Agent Documentation Hub (`.agents/`)
 All documentation and behavioral guides are consolidated in the [`.agents/`](file:///c:/Users/Gabriel/Desktop/projects/.agents) folder:
 
+- [`no-ternary.md`](file:///c:/Users/Gabriel/Desktop/projects/.agents/rules/no-ternary.md) — Strict rule: Zero ternary operators, explicit `if`/`else` only.
 - [`AGENT_BEHAVIOR_GUIDELINES.md`](file:///c:/Users/Gabriel/Desktop/projects/.agents/AGENT_BEHAVIOR_GUIDELINES.md) — Pedagogical rules, good vs. bad mentoring response examples.
 - [`BACKEND_ARCHITECTURE.md`](file:///c:/Users/Gabriel/Desktop/projects/.agents/BACKEND_ARCHITECTURE.md) — Backend storage logic, universal search, dynamic datasets.
 - [`API_REFERENCE.md`](file:///c:/Users/Gabriel/Desktop/projects/.agents/API_REFERENCE.md) — Complete endpoint reference.
@@ -33,6 +37,6 @@ All documentation and behavioral guides are consolidated in the [`.agents/`](fil
 
 ## 🏛 Ecosystem Structure
 - `backend/` on port `4000` (Shared JSON REST API)
-- `movie-app/` on port `3000` (Next.js 15 Movies Frontend)
+- `movie-app/` on port `3000` (Next.js 15 Movies Frontend with Hexagonal Architecture)
 - `recipe-app/` on port `3001` (Next.js 15 Clean Starter for user practice)
 - `.agents/` (Unified Agent Customizations, Rules & Guides)
