@@ -1,0 +1,50 @@
+[
+  {
+    "id": "book-001",
+    "name": "Clean Code: A Handbook of Agile Software Craftsmanship",
+    "description": "Even bad code can function. But if code isn't clean, it can bring a development organization to its knees.",
+    "image": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1200&q=80",
+    "author": "Robert C. Martin",
+    "genre": "Programming",
+    "year": 2008,
+    "pages": 464,
+    "rating": 4.7,
+    "tags": ["Software Engineering", "Best Practices", "Clean Architecture"]
+  },
+  {
+    "id": "book-002",
+    "name": "Designing Data-Intensive Applications",
+    "description": "The big ideas behind reliable, scalable, and maintainable systems in modern cloud and database architectures.",
+    "image": "https://images.unsplash.com/photo-1532012164546-f432f2e3777f?auto=format&fit=crop&w=1200&q=80",
+    "author": "Martin Kleppmann",
+    "genre": "Architecture",
+    "year": 2017,
+    "pages": 616,
+    "rating": 4.9,
+    "tags": ["Distributed Systems", "Databases", "Scalability"]
+  },
+  {
+    "id": "book-003",
+    "name": "Atomic Habits",
+    "description": "An easy and proven way to build good habits and break bad ones through tiny changes that yield remarkable results.",
+    "image": "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1200&q=80",
+    "author": "James Clear",
+    "genre": "Self-Help",
+    "year": 2018,
+    "pages": 320,
+    "rating": 4.8,
+    "tags": ["Habits", "Productivity", "Mindset"]
+  },
+  {
+    "id": "book-004",
+    "name": "Dune",
+    "description": "Set on the desert planet Arrakis, Dune tells the story of Paul Atreides as he navigates the most dangerous planet in the universe.",
+    "image": "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&w=1200&q=80",
+    "author": "Frank Herbert",
+    "genre": "Sci-Fi",
+    "year": 1965,
+    "pages": 688,
+    "rating": 4.7,
+    "tags": ["Sci-Fi", "Classic", "Epic"]
+  }
+]

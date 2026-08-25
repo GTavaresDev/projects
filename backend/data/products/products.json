@@ -1,0 +1,74 @@
+[
+  {
+    "id": "prod-001",
+    "name": "Sony WH-1000XM5 Wireless Headphones",
+    "description": "Industry-leading noise canceling headphones with two processors, 8 microphones, and exceptional audio quality.",
+    "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1200&q=80",
+    "category": "Electronics",
+    "price": 398.00,
+    "rating": 4.8,
+    "stock": 35,
+    "brand": "Sony",
+    "tags": ["Audio", "Bluetooth", "Noise-Canceling", "Premium"]
+  },
+  {
+    "id": "prod-002",
+    "name": "Apple MacBook Pro 16\" M3 Max",
+    "description": "The ultimate pro laptop with Liquid Retina XDR display, up to 128GB unified memory, and 22 hours of battery life.",
+    "image": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=1200&q=80",
+    "category": "Computers",
+    "price": 3499.00,
+    "rating": 4.9,
+    "stock": 14,
+    "brand": "Apple",
+    "tags": ["Laptop", "Apple Silicon", "Pro", "Creative"]
+  },
+  {
+    "id": "prod-003",
+    "name": "Mechanical Gaming Keyboard RGB",
+    "description": "Customizable tactile mechanical switches with per-key RGB backlighting and aircraft-grade aluminum frame.",
+    "image": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=1200&q=80",
+    "category": "Accessories",
+    "price": 129.99,
+    "rating": 4.6,
+    "stock": 50,
+    "brand": "Keychron",
+    "tags": ["Gaming", "Mechanical", "RGB", "Productivity"]
+  },
+  {
+    "id": "prod-004",
+    "name": "Minimalist Ceramic Coffee Dripper",
+    "description": "Handcrafted Japanese ceramic pour-over coffee dripper designed for optimal water flow and clean extraction.",
+    "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=1200&q=80",
+    "category": "Home & Kitchen",
+    "price": 42.00,
+    "rating": 4.7,
+    "stock": 80,
+    "brand": "Hario",
+    "tags": ["Coffee", "Artisan", "Ceramic", "Barista"]
+  },
+  {
+    "id": "prod-005",
+    "name": "Smart Fitness & Health Watch",
+    "description": "Advanced health tracking including ECG, sleep analysis, continuous heart rate, GPS, and water resistance up to 50m.",
+    "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1200&q=80",
+    "category": "Wearables",
+    "price": 249.00,
+    "rating": 4.5,
+    "stock": 42,
+    "brand": "Garmin",
+    "tags": ["Fitness", "Smartwatch", "Waterproof", "Health"]
+  },
+  {
+    "id": "prod-006",
+    "name": "Ergonomic Mesh Office Chair",
+    "description": "High-density breathable mesh office chair with 3D adjustable armrests and dynamic lumbar support.",
+    "image": "https://images.unsplash.com/photo-1580481077190-7361356a15fa?auto=format&fit=crop&w=1200&q=80",
+    "category": "Furniture",
+    "price": 540.00,
+    "rating": 4.7,
+    "stock": 18,
+    "brand": "Herman Miller",
+    "tags": ["Ergonomic", "Office", "Workspace", "Comfort"]
+  }
+]
