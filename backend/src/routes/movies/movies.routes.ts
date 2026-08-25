@@ -1,16 +1,8 @@
 import { Router, Request, Response } from 'express';
-import { jsonStore } from '../services/jsonStore';
-import { z } from 'zod';
+import { jsonStore } from '../../services/jsonStore';
+import { createMovieSchema, updateMovieSchema } from './movies.types';
 
 const router = Router();
-
-const createMovieSchema = z.object({
-  name: z.string().min(1, 'Name is required').trim(),
-  description: z.string().min(1, 'Description is required').trim(),
-  image: z.string().url('Image must be a valid URL'),
-});
-
-const updateMovieSchema = createMovieSchema.partial();
 
 // Search movies
 router.get('/search', (req: Request, res: Response) => {
@@ -31,8 +23,9 @@ router.get('/search', (req: Request, res: Response) => {
 router.get('/', (req: Request, res: Response) => {
   const page = parseInt((req.query.page as string) || '1', 10);
   const limit = parseInt((req.query.limit as string) || '10', 10);
+  const { page: _p, limit: _l, ...filters } = req.query;
 
-  const result = jsonStore.list('movies', { page, limit });
+  const result = jsonStore.list('movies', { page, limit }, filters);
   res.status(200).json(result);
 });
 

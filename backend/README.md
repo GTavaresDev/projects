@@ -8,7 +8,26 @@
 > **Language Versions / Versões de Idioma:**  
 > 🇺🇸 [English README](README.md) | 🇧🇷 [README em Português](README.pt-BR.md)
 
-High-performance, lightweight REST API serving rich datasets (Movies, Recipes, Products, Books) with dynamic auto-discovery, universal search, real-time analytics, recommendations, and developer utilities.
+High-performance, lightweight REST API organized into clean, dedicated feature modules: Weather forecast, Placeholder image generator, Text analyzer & slugifier, Spotlight search, Random item roulette, Movie Night combo recommendations, Real-time stats, and Dynamic datasets.
+
+---
+
+## 📂 Modular Architecture
+
+```text
+backend/src/routes/
+├── health.ts          # GET /api/v1/health & /api/v1/collections & /api/v1 (index)
+├── weather.ts         # GET /api/v1/weather & /api/v1/weather/forecast
+├── placeholders.ts    # GET /api/v1/placeholders/svg & /api/v1/placeholders/:w/:h
+├── textAnalysis.ts    # POST /api/v1/text-analysis/analyze & GET /api/v1/text-analysis/slugify
+├── search.ts          # GET /api/v1/search?q=:term (Universal Spotlight)
+├── random.ts          # GET /api/v1/random (Roulette)
+├── combos.ts          # GET /api/v1/combos/movie-night
+├── analytics.ts       # GET /api/v1/stats & GET /api/v1/:collection/facets
+├── movies.ts          # Full CRUD for Movies
+├── recipes.ts         # Full CRUD for Recipes
+└── genericCollection.ts # Fallback CRUD for any dataset in data/
+```
 
 ---
 
@@ -18,198 +37,45 @@ Base URL: `http://localhost:4000/api/v1`
 
 ---
 
-### 1. 🏥 System & Auto-Discovery
+### 1. ⛅ Dedicated Weather API (`/api/v1/weather`)
 
-#### `GET /api/v1/health`
-* **Description**: Returns API health, service uptime, version, and list of auto-discovered datasets.
-* **Response**:
+#### `GET /api/v1/weather?city=Curitiba`
+* **Description**: Returns current hourly weather, UV index, and air quality.
 ```json
 {
-  "status": "OK",
-  "timestamp": "2026-08-25T13:20:00.000Z",
-  "service": "backend",
-  "version": "1.2.0",
-  "availableCollections": ["books", "movies", "products", "recipes"]
+  "data": {
+    "city": "Curitiba",
+    "temperatureC": 22,
+    "temperatureF": 72,
+    "feelsLikeC": 24,
+    "condition": "Partly Cloudy",
+    "icon": "⛅",
+    "humidity": 55,
+    "windSpeedKmH": 14,
+    "uvIndex": 6,
+    "airQuality": "Good",
+    "updatedAt": "2026-08-25T13:57:00.000Z"
+  }
 }
 ```
 
-#### `GET /api/v1/collections`
-* **Description**: Metadata summary of all active datasets and their fields.
-* **Response**:
-```json
-{
-  "data": [
-    {
-      "name": "movies",
-      "endpoint": "/api/v1/movies",
-      "totalItems": 15,
-      "sampleFields": ["id", "name", "description", "image", "genre", "year", "rating", "duration", "director", "tags"]
-    },
-    {
-      "name": "recipes",
-      "endpoint": "/api/v1/recipes",
-      "totalItems": 15,
-      "sampleFields": ["id", "name", "description", "image", "category", "prepTime", "cookTime", "servings", "ingredients"]
-    }
-  ]
-}
-```
+#### `GET /api/v1/weather/forecast?city=Curitiba&days=5`
+* **Description**: Returns 5-day weather forecast with daily highs, lows, and rain probability.
 
 ---
 
-### 2. 🔍 Universal Search & Spotlight
+### 2. 🖼️ Dedicated Placeholders API (`/api/v1/placeholders`)
 
-#### `GET /api/v1/search?q=:term&limit=5`
-* **Description**: Universal spotlight search (Command Palette / Cmd+K) across **all** collections simultaneously.
-* **Example**: `GET /api/v1/search?q=Nolan`
-* **Response**:
-```json
-{
-  "data": {
-    "query": "Nolan",
-    "totalMatches": 4,
-    "results": {
-      "movies": [
-        {
-          "id": "movie-001",
-          "name": "Inception",
-          "director": "Christopher Nolan",
-          "genre": "Sci-Fi",
-          "rating": 8.8
-        },
-        {
-          "id": "movie-002",
-          "name": "Interstellar",
-          "director": "Christopher Nolan",
-          "genre": "Sci-Fi",
-          "rating": 8.7
-        }
-      ]
-    }
-  }
-}
-```
+#### `GET /api/v1/placeholders/svg?width=600&height=400&text=Custom+Banner&bg=1e1b4b&color=818cf8`
+#### `GET /api/v1/placeholders/400/300?text=Card+Preview`
+* **Description**: Returns a dynamic, customizable vector SVG image directly into `<img src="..." />` tags.
 
 ---
 
-### 3. 🎲 Random & Smart Combinations
+### 3. ✍️ Dedicated Text Analysis & Slug API (`/api/v1/text-analysis`)
 
-#### `GET /api/v1/random` / `GET /api/v1/:collection/random`
-* **Description**: Returns a random item from any collection or a specific dataset. Perfect for Tinder-like swipe apps or decision spinners.
-* **Response**:
-```json
-{
-  "data": {
-    "collection": "recipes",
-    "item": {
-      "id": "recipe-001",
-      "name": "Classic Italian Carbonara",
-      "category": "Pasta",
-      "difficulty": "Medium",
-      "image": "https://..."
-    }
-  }
-}
-```
-
-#### `GET /api/v1/combos/movie-night?genre=Sci-Fi`
-* **Description**: Intelligently pairs a random movie with a complementary gourmet recipe and preparation tips for movie night apps.
-* **Response**:
-```json
-{
-  "data": {
-    "title": "The Ultimate Sci-Fi & Comfort Food Evening",
-    "theme": "Sci-Fi",
-    "movie": {
-      "id": "movie-001",
-      "name": "Inception",
-      "genre": "Sci-Fi",
-      "rating": 8.8
-    },
-    "recipe": {
-      "id": "recipe-003",
-      "name": "Gourmet Beef Smash Burger",
-      "category": "Burgers",
-      "prepTime": "15 min"
-    },
-    "tip": "Start cooking the Gourmet Beef Smash Burger (15 min prep) before pressing play on Inception!"
-  }
-}
-```
-
----
-
-### 4. 📊 Analytics, Metrics & Dynamic Facets
-
-#### `GET /api/v1/stats`
-* **Description**: Real-time aggregated statistics across all datasets (averages, item counts, top tags, server uptime). Ideal for chart dashboards.
-* **Response**:
-```json
-{
-  "data": {
-    "totalCollections": 4,
-    "totalItems": 40,
-    "collections": {
-      "movies": {
-        "totalItems": 15,
-        "averageRating": 8.61,
-        "topTags": [
-          { "tag": "Sci-Fi", "count": 5 },
-          { "tag": "Action", "count": 4 }
-        ]
-      },
-      "recipes": {
-        "totalItems": 15,
-        "averageRating": null,
-        "topTags": [
-          { "tag": "Italian", "count": 3 },
-          { "tag": "Comfort Food", "count": 3 }
-        ]
-      }
-    },
-    "serverUptimeSeconds": 420
-  }
-}
-```
-
-#### `GET /api/v1/:collection/facets` (e.g. `/api/v1/movies/facets`, `/api/v1/recipes/facets`)
-* **Description**: Generates dynamic facets (unique categories, genres, difficulties, min/max ranges) with item counts for building sidebar filter menus.
-* **Response**:
-```json
-{
-  "data": {
-    "collection": "movies",
-    "totalItems": 15,
-    "facets": {
-      "genres": {
-        "Sci-Fi": 5,
-        "Action": 2,
-        "Drama": 2,
-        "Crime": 1,
-        "Animation": 2,
-        "Thriller": 1,
-        "Comedy": 1,
-        "Biography": 1
-      },
-      "ratingRange": { "min": 8.0, "max": 9.0 },
-      "yearRange": { "min": 1994, "max": 2024 }
-    }
-  }
-}
-```
-
----
-
-### 5. 🛠️ Dynamic Developer Utilities
-
-#### `GET /api/v1/utils/placeholder.svg`
-* **Parameters**: `width`, `height`, `text`, `bg` (hex without #), `color` (hex without #)
-* **Example**: `<img src="http://localhost:4000/api/v1/utils/placeholder.svg?width=600&height=400&text=Custom+Banner&bg=4338ca&color=ffffff" />`
-* **Returns**: Raw SVG Vector Image.
-
-#### `POST /api/v1/utils/analyze-text`
+#### `POST /api/v1/text-analysis/analyze`
 * **Payload**: `{ "text": "Building Fullstack Apps with Next.js 15" }`
-* **Response**:
 ```json
 {
   "data": {
@@ -223,38 +89,49 @@ Base URL: `http://localhost:4000/api/v1`
 }
 ```
 
-#### `GET /api/v1/utils/weather?city=Sao+Paulo`
-* **Description**: Deterministic hourly weather simulation for dashboard navbar widgets.
-* **Response**:
-```json
-{
-  "data": {
-    "city": "Sao Paulo",
-    "temperatureC": 24,
-    "temperatureF": 75,
-    "feelsLikeC": 26,
-    "condition": "Partly Cloudy",
-    "icon": "⛅",
-    "humidity": 55,
-    "windSpeedKmH": 12,
-    "updatedAt": "2026-08-25T13:20:00.000Z"
-  }
-}
-```
+#### `GET /api/v1/text-analysis/slugify?text=Next.js+15+App+Router`
+* **Description**: Converts any string into an SEO-friendly URL slug.
 
 ---
 
-### 6. 📁 Core Datasets & Dynamic Collections
+### 4. 🔍 Universal Search & Spotlight (`/api/v1/search`)
 
-All datasets (`/movies`, `/recipes`, `/products`, `/books`, and any folder under `data/<name>/`) support:
+#### `GET /api/v1/search?q=Nolan&limit=5`
+* **Description**: Universal spotlight search (Cmd+K) across **all** collections simultaneously.
+
+---
+
+### 5. 🎲 Random & Smart Combinations (`/api/v1/random`, `/api/v1/combos`)
+
+#### `GET /api/v1/random`
+* **Description**: Roulette generator picking a random item from any collection.
+
+#### `GET /api/v1/combos/movie-night?genre=Sci-Fi`
+* **Description**: Pairs a random movie with a matching gourmet recipe and preparation tips.
+
+---
+
+### 6. 📊 Analytics, Metrics & Dynamic Facets (`/api/v1/stats`, `/api/v1/:collection/facets`)
+
+#### `GET /api/v1/stats`
+* **Description**: Real-time aggregated statistics across all datasets (totals, averages, top tags, uptime).
+
+#### `GET /api/v1/movies/facets` & `GET /api/v1/recipes/facets`
+* **Description**: Extracts distinct genres, categories, and min/max ranges for building sidebar filter menus.
+
+---
+
+### 7. 📁 Core Datasets & Dynamic Collections
+
+Available at `/movies`, `/recipes`, `/products`, `/books`, and any folder under `data/<name>/`:
 
 | Method | Endpoint | Query Parameters | Description |
 |---|---|---|---|
-| `GET` | `/api/v1/:collection` | `page=1`, `limit=10`, `genre=Sci-Fi`, `category=Pasta` | Paginated list with attribute filtering |
+| `GET` | `/api/v1/:collection` | `page=1`, `limit=10`, `genre=Sci-Fi` | Paginated list with attribute filtering |
 | `GET` | `/api/v1/:collection/search` | `q=term`, `page=1`, `limit=10` | Universal deep search in collection |
 | `GET` | `/api/v1/:collection/:id` | — | Get single item by ID |
 | `POST` | `/api/v1/:collection` | Body: `{ name, description, image, ... }` | Create new item |
-| `PUT` | `/api/v1/:collection/:id` | Body: `{ ...fieldsToUpdate }` | Update item |
+| `PUT` | `/api/v1/:collection/:id` | Body: `{ ...fields }` | Update item |
 | `DELETE` | `/api/v1/:collection/:id` | — | Delete item |
 
 ---

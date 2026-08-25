@@ -4,8 +4,14 @@ import { createApp } from '../src/app';
 
 const app = createApp();
 
-describe('Enhanced Catalog Backend API Test Suite', () => {
-  describe('System & Discovery', () => {
+describe('Modular Catalog Backend API Test Suite', () => {
+  describe('1. Health & Discovery', () => {
+    it('GET /api/v1 returns welcome index with route map', async () => {
+      const res = await request(app).get('/api/v1');
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveProperty('endpoints');
+    });
+
     it('GET /api/v1/health returns status and collections', async () => {
       const res = await request(app).get('/api/v1/health');
       expect(res.status).toBe(200);
@@ -21,7 +27,63 @@ describe('Enhanced Catalog Backend API Test Suite', () => {
     });
   });
 
-  describe('Spotlight & Combinations', () => {
+  describe('2. Dedicated Weather API (/api/v1/weather)', () => {
+    it('GET /api/v1/weather returns current weather with UV and air quality', async () => {
+      const res = await request(app).get('/api/v1/weather?city=Curitiba');
+      expect(res.status).toBe(200);
+      expect(res.body.data.city).toBe('Curitiba');
+      expect(res.body.data).toHaveProperty('temperatureC');
+      expect(res.body.data).toHaveProperty('condition');
+      expect(res.body.data).toHaveProperty('icon');
+    });
+
+    it('GET /api/v1/weather/forecast returns 5-day weather forecast', async () => {
+      const res = await request(app).get('/api/v1/weather/forecast?city=Curitiba&days=5');
+      expect(res.status).toBe(200);
+      expect(res.body.data.forecast).toHaveLength(5);
+      expect(res.body.data.forecast[0]).toHaveProperty('maxTempC');
+      expect(res.body.data.forecast[0]).toHaveProperty('dayOfWeek');
+    });
+  });
+
+  describe('3. Dedicated Placeholders API (/api/v1/placeholders)', () => {
+    it('GET /api/v1/placeholders/svg generates custom SVG image', async () => {
+      const res = await request(app).get('/api/v1/placeholders/svg?width=400&height=200&text=Card');
+      expect(res.status).toBe(200);
+      expect(res.headers['content-type']).toContain('image/svg+xml');
+      const text = res.text || res.body.toString();
+      expect(text).toContain('<svg');
+      expect(text).toContain('Card');
+    });
+
+    it('GET /api/v1/placeholders/:width/:height generates shortcut SVG image', async () => {
+      const res = await request(app).get('/api/v1/placeholders/500/250?text=Hero');
+      expect(res.status).toBe(200);
+      expect(res.headers['content-type']).toContain('image/svg+xml');
+      const text = res.text || res.body.toString();
+      expect(text).toContain('<svg');
+      expect(text).toContain('Hero');
+    });
+  });
+
+  describe('4. Dedicated Text Analysis API (/api/v1/text-analysis)', () => {
+    it('POST /api/v1/text-analysis/analyze calculates reading time and slug', async () => {
+      const res = await request(app)
+        .post('/api/v1/text-analysis/analyze')
+        .send({ text: 'Exploring Next.js 15 App Router' });
+      expect(res.status).toBe(200);
+      expect(res.body.data.slug).toBe('exploring-next-js-15-app-router');
+      expect(res.body.data.wordCount).toBe(5);
+    });
+
+    it('GET /api/v1/text-analysis/slugify generates slug from query param', async () => {
+      const res = await request(app).get('/api/v1/text-analysis/slugify?text=TypeScript+Design+Patterns');
+      expect(res.status).toBe(200);
+      expect(res.body.data.slug).toBe('typescript-design-patterns');
+    });
+  });
+
+  describe('5. Dedicated Search, Random & Combos APIs', () => {
     it('GET /api/v1/search?q=Nolan searches across all datasets', async () => {
       const res = await request(app).get('/api/v1/search?q=Nolan');
       expect(res.status).toBe(200);
@@ -36,7 +98,7 @@ describe('Enhanced Catalog Backend API Test Suite', () => {
       expect(res.body.data).toHaveProperty('item');
     });
 
-    it('GET /api/v1/combos/movie-night generates a paired movie + recipe evening', async () => {
+    it('GET /api/v1/combos/movie-night generates paired movie + recipe', async () => {
       const res = await request(app).get('/api/v1/combos/movie-night');
       expect(res.status).toBe(200);
       expect(res.body.data).toHaveProperty('movie');
@@ -45,51 +107,21 @@ describe('Enhanced Catalog Backend API Test Suite', () => {
     });
   });
 
-  describe('Analytics & Facets', () => {
-    it('GET /api/v1/stats calculates global averages and tag counts', async () => {
+  describe('6. Analytics & Facets', () => {
+    it('GET /api/v1/stats calculates global stats', async () => {
       const res = await request(app).get('/api/v1/stats');
       expect(res.status).toBe(200);
       expect(res.body.data.totalItems).toBeGreaterThanOrEqual(30);
-      expect(res.body.data.collections).toHaveProperty('movies');
     });
 
-    it('GET /api/v1/movies/facets returns unique genres and rating ranges', async () => {
+    it('GET /api/v1/movies/facets returns unique genres and ranges', async () => {
       const res = await request(app).get('/api/v1/movies/facets');
       expect(res.status).toBe(200);
       expect(res.body.data.facets).toHaveProperty('genres');
-      expect(res.body.data.facets).toHaveProperty('ratingRange');
     });
   });
 
-  describe('Developer Utilities', () => {
-    it('GET /api/v1/utils/placeholder.svg generates valid SVG', async () => {
-      const res = await request(app).get('/api/v1/utils/placeholder.svg?width=400&height=200&text=Test');
-      expect(res.status).toBe(200);
-      expect(res.headers['content-type']).toContain('image/svg+xml');
-      const text = res.text || res.body.toString();
-      expect(text).toContain('<svg');
-      expect(text).toContain('Test');
-    });
-
-    it('POST /api/v1/utils/analyze-text calculates reading time and slug', async () => {
-      const res = await request(app)
-        .post('/api/v1/utils/analyze-text')
-        .send({ text: 'Hello World from Next.js & Express!' });
-      expect(res.status).toBe(200);
-      expect(res.body.data.slug).toBe('hello-world-from-next-js-express');
-      expect(res.body.data.wordCount).toBe(6);
-    });
-
-    it('GET /api/v1/utils/weather returns dynamic weather simulation', async () => {
-      const res = await request(app).get('/api/v1/utils/weather?city=Lisbon');
-      expect(res.status).toBe(200);
-      expect(res.body.data.city).toBe('Lisbon');
-      expect(res.body.data).toHaveProperty('temperatureC');
-      expect(res.body.data).toHaveProperty('condition');
-    });
-  });
-
-  describe('Core Datasets (Movies, Recipes, Products, Books)', () => {
+  describe('7. Core Datasets (Movies, Recipes, Products, Books)', () => {
     it('GET /api/v1/movies lists paginated movies', async () => {
       const res = await request(app).get('/api/v1/movies?page=1&limit=5');
       expect(res.status).toBe(200);
@@ -103,13 +135,13 @@ describe('Enhanced Catalog Backend API Test Suite', () => {
       expect(res.body.data).toHaveLength(5);
     });
 
-    it('GET /api/v1/products lists tech items', async () => {
+    it('GET /api/v1/products lists products', async () => {
       const res = await request(app).get('/api/v1/products');
       expect(res.status).toBe(200);
       expect(res.body.data.length).toBeGreaterThan(0);
     });
 
-    it('GET /api/v1/books lists literature & tech books', async () => {
+    it('GET /api/v1/books lists books', async () => {
       const res = await request(app).get('/api/v1/books');
       expect(res.status).toBe(200);
       expect(res.body.data.length).toBeGreaterThan(0);

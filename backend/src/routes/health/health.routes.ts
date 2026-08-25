@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { jsonStore } from '../services/jsonStore';
+import { jsonStore } from '../../services/jsonStore';
 
 const router = Router();
 
@@ -17,14 +17,16 @@ const welcomeHandler = (_req: Request, res: Response) => {
       universalSearch: '/api/v1/search?q=:term',
       randomItem: '/api/v1/random',
       movieNightCombo: '/api/v1/combos/movie-night',
-      placeholderSvg: '/api/v1/utils/placeholder.svg?width=600&height=400&text=Sample',
-      weatherSimulation: '/api/v1/utils/weather?city=Sao+Paulo',
+      weather: '/api/v1/weather?city=Curitiba',
+      weatherForecast: '/api/v1/weather/forecast?city=Curitiba&days=5',
+      placeholderSvg: '/api/v1/placeholders/svg?width=600&height=400&text=Sample',
       availableDatasets: collections.map((name) => `/api/v1/${name}`),
     },
   });
 };
 
 router.get('/', welcomeHandler);
+
 router.get('/health', (_req: Request, res: Response) => {
   const collections = jsonStore.getAvailableCollections();
   res.status(200).json({

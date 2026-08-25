@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { jsonStore } from '../services/jsonStore';
+import { jsonStore } from '../../services/jsonStore';
 
 export function createCollectionRouter(collectionName?: string): Router {
   const router = Router({ mergeParams: true });
@@ -20,9 +20,7 @@ export function createCollectionRouter(collectionName?: string): Router {
       return;
     }
 
-    // Extract additional filter parameters (excluding pagination/query keys)
     const { q, page: _p, limit: _l, ...filters } = req.query;
-
     const result = jsonStore.search(collection, query, { page, limit }, filters);
     res.status(200).json(result);
   });
@@ -34,7 +32,6 @@ export function createCollectionRouter(collectionName?: string): Router {
     const limit = parseInt((req.query.limit as string) || '10', 10);
 
     const { page: _p, limit: _l, ...filters } = req.query;
-
     const result = jsonStore.list(collection, { page, limit }, filters);
     res.status(200).json(result);
   });
