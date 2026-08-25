@@ -4,15 +4,10 @@ import dotenv from 'dotenv';
 
 // Clean Feature Modules
 import { healthRoutes } from './routes/health';
-import { weatherRoutes } from './routes/weather';
-import { placeholderRoutes } from './routes/placeholders';
-import { textAnalysisRoutes } from './routes/textAnalysis';
-import { searchRoutes } from './routes/search';
-import { randomRoutes } from './routes/random';
-import { combosRoutes } from './routes/combos';
-import { analyticsRoutes } from './routes/analytics';
 import { movieRoutes } from './routes/movies';
-import { recipeRoutes } from './routes/recipes';
+import { bookRoutes } from './routes/books';
+import { searchRoutes } from './routes/search';
+import { createCityDistanceRouter } from './routes/cityDistance';
 import { createCollectionRouter } from './routes/genericCollection';
 
 dotenv.config();
@@ -28,28 +23,20 @@ export function createApp(): Express {
     res.redirect('/api/v1');
   });
 
-  // 1. Health & Discovery Index
+  // 1. Health & Discovery Index (/api/v1/health, /api/v1/collections, /api/v1)
   app.use('/api/v1', healthRoutes);
 
-  // 2. Dedicated Feature APIs (Clean Architecture)
-  app.use('/api/v1/weather', weatherRoutes);
-  app.use('/api/v1/placeholders', placeholderRoutes);
-  app.use('/api/v1/text-analysis', textAnalysisRoutes);
-  app.use('/api/v1/search', searchRoutes);
-  app.use('/api/v1/random', randomRoutes);
-  app.use('/api/v1/combos', combosRoutes);
-  app.use('/api/v1', analyticsRoutes);
-
-  // 3. Backward-compatibility aliases for /api/v1/utils/*
-  app.use('/api/v1/utils/weather', weatherRoutes);
-  app.use('/api/v1/utils/placeholder.svg', placeholderRoutes);
-  app.use('/api/v1/utils/analyze-text', textAnalysisRoutes);
-
-  // 4. Catalog APIs
+  // 2. Core Catalogs
   app.use('/api/v1/movies', movieRoutes);
-  app.use('/api/v1/recipes', recipeRoutes);
+  app.use('/api/v1/books', bookRoutes);
 
-  // 5. Dynamic Collection Fallback for any dataset in data/<collection>/
+  // 3. Search (Spotlight across Movies & Books)
+  app.use('/api/v1/search', searchRoutes);
+
+  // 4. Fun Utility API: City Distance & Word Comparison
+  app.use('/api/v1/city-distance', createCityDistanceRouter());
+
+  // 5. Dynamic Fallback for any dataset in data/<collection>/
   app.use('/api/v1/:collection', createCollectionRouter());
 
   return app;

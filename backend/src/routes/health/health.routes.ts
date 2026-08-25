@@ -8,18 +8,16 @@ const welcomeHandler = (_req: Request, res: Response) => {
   const collections = jsonStore.getAvailableCollections();
   res.status(200).json({
     message: '🚀 Catalog Backend API is running successfully!',
-    version: '1.2.0',
+    version: '1.3.0',
     documentation: 'See .agents/API_REFERENCE.md',
     endpoints: {
       health: '/api/v1/health',
       collectionsSummary: '/api/v1/collections',
-      globalStats: '/api/v1/stats',
+      movies: '/api/v1/movies',
+      books: '/api/v1/books',
       universalSearch: '/api/v1/search?q=:term',
-      randomItem: '/api/v1/random',
-      movieNightCombo: '/api/v1/combos/movie-night',
-      weather: '/api/v1/weather?city=Curitiba',
-      weatherForecast: '/api/v1/weather/forecast?city=Curitiba&days=5',
-      placeholderSvg: '/api/v1/placeholders/svg?width=600&height=400&text=Sample',
+      cityDistance: '/api/v1/city-distance?origin=Sao+Paulo&destination=Curitiba',
+      wordCompare: '/api/v1/city-distance/word-compare?word1=algoritmo&word2=logaritmo',
       availableDatasets: collections.map((name) => `/api/v1/${name}`),
     },
   });
@@ -33,7 +31,7 @@ router.get('/health', (_req: Request, res: Response) => {
     status: 'OK',
     timestamp: new Date().toISOString(),
     service: 'backend',
-    version: '1.2.0',
+    version: '1.3.0',
     availableCollections: collections,
   });
 });
@@ -42,11 +40,17 @@ router.get('/collections', (_req: Request, res: Response) => {
   const collections = jsonStore.getAvailableCollections();
   const summary = collections.map((name) => {
     const items = jsonStore.readCollection(name);
+    let sampleFields: string[];
+    if (items.length > 0) {
+      sampleFields = Object.keys(items[0]);
+    } else {
+      sampleFields = [];
+    }
     return {
       name,
       endpoint: `/api/v1/${name}`,
       totalItems: items.length,
-      sampleFields: items.length > 0 ? Object.keys(items[0]) : [],
+      sampleFields,
     };
   });
 

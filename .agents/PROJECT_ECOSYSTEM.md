@@ -9,16 +9,18 @@ This document provides context for AI agents working in this workspace (`c:\User
 ```text
 projects/
 ├── backend/               # Express + TypeScript JSON REST API (Port 4000)
-│   ├── data/              # JSON Datasets: movies, recipes, products, books
-│   └── src/routes/        # 11 Modular Feature Folders (weather, search, analytics, etc.)
+│   ├── data/              # JSON Datasets: movies, books
+│   └── src/routes/        # Modular Feature Folders (movies, books, search, cityDistance, health)
 │
 ├── movie-app/             # Next.js 15 Movies Catalog App (Port 3000)
-│   ├── core/              # Hexagonal Domain & Infrastructure (Models, Ports, Repositories)
+│   ├── core/              # Hexagonal Domain & Infrastructure
 │   ├── src/               # Presentation Layer (App Router, shadcn/ui, Layout)
 │   └── tests/             # Vitest unit tests
 │
-├── recipe-app/            # Clean Next.js 15 Starter for Recipes (Port 3001)
-│   └── src/               # User study and practice project
+├── city-app/              # Next.js 15 City Distance & Word Analyzer App (Port 3002)
+│   ├── core/              # Hexagonal Domain & Infrastructure
+│   ├── src/               # Dashboard & Lexical Comparison Pages
+│   └── tests/             # Vitest unit tests
 │
 ├── AGENTS.md              # Root agents guidance & strict rules
 │
@@ -52,18 +54,9 @@ npm run dev
 # Running at http://localhost:3000
 ```
 
-### 3. Run Recipe App
+### 3. Run City App
 ```bash
-cd c:\Users\Gabriel\Desktop\projects\recipe-app
+cd c:\Users\Gabriel\Desktop\projects\city-app
 npm run dev
-# Running at http://localhost:3001
+# Running at http://localhost:3002
 ```
-
----
-
-## 🤖 Mandatory Instructions for AI Agents
-1. **Pedagogical Mode (Strict)**: Never write code directly into student files. Guide with structural syntax in chat.
-2. **Zero Ternaries**: Never use ternary operators (`condition ? a : b`). Declare explicit `if` and `else`.
-3. **Frontend Hexagonal Architecture**: Place `core/` at the root of frontend projects with `domain/` and `infrastructure/`.
-4. **UI Standards**: Use **shadcn/ui** and **Lucide React** in `src/components/ui/`.
-5. **Language**: Keep all code, models, commit messages, and API routes in English.
